@@ -24,7 +24,7 @@ with st.expander("ℹ️ About This Dashboard", expanded=False):
 # Load Data with Cache
 @st.cache_data
 def load_data():
-    return pd.read_csv("output/RFM_segmented_customers.csv")
+    return pd.read_csv("RFM_segmented_customers.csv")
 
 
 df = load_data()
