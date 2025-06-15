@@ -5,29 +5,39 @@ import seaborn as sns
 from PIL import Image
 
 # Page Configuration
-st.set_page_config(page_title="BankTrust RFM Dashboard by Amdari", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="BankTrust RFM Dashboard",
+                   layout="wide",
+                   initial_sidebar_state="expanded"
+                   )
 
-with st.expander("ℹ️ About This Dashboard", expanded=False):
-    st.markdown("""
-        This interactive dashboard helps analyze customer segments using **Recency**, **Frequency**, and **Monetary (RFM)** metrics.
-        
-        - **Bankers** can prioritize marketing and retention strategies.
-        - **Customers** (in future versions) may log in to view their segment (if integrated with auth).
-        
-        Segment examples:
-        - 💎 Best Customers
-        - 🔁 Loyal Customers
-        - ⚠️ At Risk
-        - ❌ Churned
-    """)
-
-# Load Data with Cache
 @st.cache_data
 def load_data():
-    return pd.read_csv("RFM_segmented_customers.csv")
+    df = pd.read_csv("RFM_segmented_customers.csv")  # ✅ Make sure this path is correct
 
+    # ✅ Check and add 'Segment' if missing
+    if 'Segment' not in df.columns:
+        df['R_score'] = pd.qcut(df['Recency'], q=4, labels=[4,3,2,1]).astype(int)
+        df['F_score'] = pd.qcut(df['Frequency'].rank(method='first'), q=4, labels=[1,2,3,4]).astype(int)
+        df['M_score'] = pd.qcut(df['Monetary'], q=4, labels=[1,2,3,4]).astype(int)
+        df['RFM_score'] = df['R_score'] + df['F_score'] + df['M_score']
+
+        def assign_segment(score):
+            if score >= 9:
+                return 'Best Customers'
+            elif score >= 6:
+                return 'Loyal Customers'
+            elif score >= 4:
+                return 'At Risk'
+            else:
+                return 'Churned'
+        df['Segment'] = df['RFM_score'].apply(assign_segment)
+
+    return df
+# 
 
 df = load_data()
+
+segments = st.multiselect("Select Segment", options=sorted(df['Segment'].unique()))
 
 # === Sidebar ===
 with st.sidebar:
