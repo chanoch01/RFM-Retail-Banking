@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from PIL import Image
 
+# Page Configuration
+st.set_page_config(page_title="BankTrust RFM Dashboard by Amdari", layout="wide", initial_sidebar_state="expanded")
+
 with st.expander("ℹ️ About This Dashboard", expanded=False):
     st.markdown("""
         This interactive dashboard helps analyze customer segments using **Recency**, **Frequency**, and **Monetary (RFM)** metrics.
@@ -22,9 +25,6 @@ with st.expander("ℹ️ About This Dashboard", expanded=False):
 @st.cache_data
 def load_data():
     return pd.read_csv("output/RFM_segmented_customers.csv")
-
-# Page Configuration
-st.set_page_config(page_title="BankTrust RFM Dashboard by Amdari", layout="wide", initial_sidebar_state="expanded")
 
 
 df = load_data()
