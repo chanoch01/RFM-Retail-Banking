@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
+import matplotlib.pyplot as plt
+import seaborn as sns
+from PIL import Image
 
 with st.expander("ℹ️ About This Dashboard", expanded=False):
     st.markdown("""
@@ -17,14 +18,14 @@ with st.expander("ℹ️ About This Dashboard", expanded=False):
         - ❌ Churned
     """)
 
-
-# Page Configuration
-st.set_page_config(page_title="BankTrust RFM Dashboard by Amdari", layout="wide", initial_sidebar_state="expanded")
-
 # Load Data with Cache
 @st.cache_data
 def load_data():
     return pd.read_csv("output/RFM_segmented_customers.csv")
+
+# Page Configuration
+st.set_page_config(page_title="BankTrust RFM Dashboard by Amdari", layout="wide", initial_sidebar_state="expanded")
+
 
 df = load_data()
 
