@@ -3,13 +3,28 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+with st.expander("ℹ️ About This Dashboard", expanded=False):
+    st.markdown("""
+        This interactive dashboard helps analyze customer segments using **Recency**, **Frequency**, and **Monetary (RFM)** metrics.
+        
+        - **Bankers** can prioritize marketing and retention strategies.
+        - **Customers** (in future versions) may log in to view their segment (if integrated with auth).
+        
+        Segment examples:
+        - 💎 Best Customers
+        - 🔁 Loyal Customers
+        - ⚠️ At Risk
+        - ❌ Churned
+    """)
+
+
 # Page Configuration
 st.set_page_config(page_title="BankTrust RFM Dashboard by Amdari", layout="wide", initial_sidebar_state="expanded")
 
 # Load Data with Cache
 @st.cache_data
 def load_data():
-    return pd.read_csv("output/rfm_segmented.csv")
+    return pd.read_csv("output/RFM_segmented_customers.csv")
 
 df = load_data()
 
